@@ -204,10 +204,13 @@ public:
 							 j3.GetRawButton(Button_Inbound), 
 							 j3.GetRawButton(Button_Pickup) ||
 							 stickRight.GetRawButton(Button_DriverPickup));
+			IntakeArm.manual(j3.GetRawButton(Button_RollerIn), 
+							 j3.GetRawButton(Button_RollerOut), 
+							 j3.GetRawButton(Button_ArmDown));
 			Ejector.Set(IntakeArm.get_ejector());
 			ArmWheels.SetSpeed(IntakeArm.get_roller());
 			Arm.Set(IntakeArm.get_armpist());
-			//ArmO.Set(!IntakeArm.get_armpist());  ///Remove for Competion robot
+			
 			
 			//Catapult Controls
 			Shooter.update(stickRight.GetRawButton(Button_DriverShoot) ||
