@@ -131,7 +131,7 @@ public:
 					last_error = error;
 					if (error == 0) break;  //if in right spot, go to firing
 				}
-				//fire
+				//fire after it moves forward
 				Shooter.update(true,
 						 	   LauncherBotm1.Get());
 				Winch.SetSpeed(Shooter.get_winch());
@@ -190,16 +190,17 @@ public:
 		myRobot.SetSafetyEnabled(false);
 		while (IsOperatorControl())
 		{
-			//Drivebase comment
+			//Drivebase
 			float LeftDriveC = -stickLeft.GetY();
 			float RightDriveC = -stickRight.GetX();
-			bool isQuickTurn = stickRight.GetRawButton(2);
-			
 			bool ShifterC = (stickLeft.GetRawButton(Button_Shifter));
 			Shifter.Set(ShifterC);
 			
 			//Cheezy Drive (Left and Right Drive Control)
-			chezyDrive.update(LeftDriveC, RightDriveC, isQuickTurn, !ShifterC);		
+			chezyDrive.update(LeftDriveC, 
+							  RightDriveC, 
+							  stickRight.GetRawButton(Button_QuickTurn), 
+							  !ShifterC);		
 			LeftDrive.Set(chezyDrive.get_l());
 			RightDrive.Set(chezyDrive.get_r());
 			

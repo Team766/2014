@@ -17,6 +17,7 @@ static const uint32_t Button_Halfspeed = 7;
 static const uint32_t Button_Reverse = 2;
 static const uint32_t Button_DriverShoot = 1;
 static const uint32_t Button_DriverPickup = 7; //make toggle
+static const uint32_t Button_QuickTurn = 2;
 
 //box joystick
 static const uint32_t Axis_BallGuard = 4;
