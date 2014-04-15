@@ -98,12 +98,6 @@ public:
 		dash->PutNumber("Kp1Ball", OneBallKp);
 		dash->PutNumber("Kd1Ball", OneBallKd);
 		
-/*		dash->PutNumber("ArmWheelSpeed",ArmWheelSpeed);
-		dash->PutNumber("LimArmWheelSpeed",LimArmWheelSpeed);
-		dash->PutNumber("WinchSpeed",WinchSpeed);
-		dash->PutNumber("LeftForPower",LeftForPower);
-		dash->PutNumber("RightForPower",RightForPower);
-		dash->PutNumber("AutonTime",AutonTime);*/
 		ArmC = true;
 		shootbutton = false;
 	}
@@ -113,7 +107,8 @@ public:
 		GetWatchdog().Feed();
 		
 		if(Button_AutonSwitch){
-			if(j3.GetRawButton(7)){
+			if(j3.GetRawButton(7)){  //Fix command from sequential to concurent
+				//Reseting Encoders
 				LDriveEnc.Reset();
 				RDriveEnc.Reset();
 				//Move forward 24 inches
@@ -133,7 +128,7 @@ public:
 				}
 				//fire after it moves forward
 				Shooter.update(true,
-						 	   LauncherBotm1.Get());
+					       LauncherBotm1.Get());
 				Winch.SetSpeed(Shooter.get_winch());
 				WinchPist.Set(Shooter.get_winchLock());				
 				
