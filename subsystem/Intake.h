@@ -6,6 +6,7 @@
 class Intake {
 public:
 	void update(bool button_eject, bool button_inbound, bool button_intake);
+	void manual(bool button_in, bool button_out, bool button_arm);
 	bool get_ejector(void);
 	float get_roller(void);
 	bool get_armpist(void);

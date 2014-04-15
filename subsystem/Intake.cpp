@@ -34,7 +34,17 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake) 
 	out_roller = rollerC;
 	out_armpist = armpistC;
 }
-
+void Intake::manual(bool button_in, bool button_out, bool button_arm){
+	float rollerC = RollerOffSpeed;
+	bool armpistC = ArmUp;
+	
+	if(button_in) rollerC = RollerInSpeed;
+	if(button_out) rollerC = RollerOutSpeed;
+	if(button_arm) armpistC = ArmDown;
+	
+	out_roller = rollerC;
+	out_armpist = armpistC;
+}
 bool Intake::get_ejector(void)  {
 	return out_ejector;
 }
