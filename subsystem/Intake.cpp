@@ -10,7 +10,6 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake) 
 	// arm up
 	bool armpistC = ArmUp;
 	
-
 	if(button_eject){
 		printf("Eject \n");
 		//piston out
@@ -36,8 +35,8 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake) 
 	out_armpist = armpistC;
 }
 void Intake::manual(bool button_in, bool button_out, bool button_arm){
-	float rollerC;
-	bool armpistC;
+	float rollerC = RollerOffSpeed;
+	bool armpistC = ArmUp;
 	
 	if(button_in) rollerC = RollerInSpeed;
 	if(button_out) rollerC = RollerOutSpeed;
@@ -65,7 +64,7 @@ bool Intake::get_armpist(void)  {
 
 
 /*
-Swag State Machine(254)
+Swag State Macchine(254)
 
 Intake::update()  {
 	newState = state;
@@ -116,38 +115,5 @@ Intake::update()  {
 	if(state != newState) {
 		state = newState;
 	}
-}
-*/
-
-
-
-
-
-
-
-
-/*
- * void Intake::intakeToggle(bool button_driverIntake){
-	bool armpistC;
-	bool toggle = true;
-	float rollerC;
-
-	if (toggle && button_driverIntake) {
-		toggle = false;
-		if (!out_armpist) {
-			armpistC = ArmDown;
-			rollerC = RollerOutSpeed;
-		} 
-		else {
-			armpistC = out_armpist;
-			rollerC = out_roller;
-		}
-	}
-	else if(!button_driverIntake) { 
-	toggle = true;
-	}
-	
-	out_roller = rollerC;
-	out_armpist = armpistC;
 }
 */
