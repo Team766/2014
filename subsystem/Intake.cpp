@@ -1,7 +1,7 @@
 #include "Intake.h"
 #include "../RobotValues.h"
 
-void Intake::update(bool button_eject, bool button_inbound, bool button_intake)  {
+void Intake::update(bool button_eject, bool button_inbound, bool button_intake, bool button_in, bool button_out, bool button_arm)  {
 	
 	// piston in
 	bool ejectorC = EjectorIn;
@@ -31,18 +31,11 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake) 
 		rollerC = RollerInSpeed;
 	}
 	
-	out_ejector = ejectorC;
-	out_roller = rollerC;
-	out_armpist = armpistC;
-}
-void Intake::manual(bool button_in, bool button_out, bool button_arm){
-	float rollerC;
-	bool armpistC;
-	
 	if(button_in) rollerC = RollerInSpeed;
 	if(button_out) rollerC = RollerOutSpeed;
 	if(button_arm) armpistC = ArmDown;
 	
+	out_ejector = ejectorC;
 	out_roller = rollerC;
 	out_armpist = armpistC;
 }

@@ -61,3 +61,5 @@ static const uint32_t Button_Ejector = 11;
 static const uint32_t Button_ArmDown = 12;
 
 static const uint32_t Button_AutonSwitch = 7;
+static const uint32_t Axis_Horizontal = 5;
+static const uint32_t Axis_Verticle = 6;

@@ -95,8 +95,8 @@ public:
 		RDriveEnc.Start();
 		
 		dash->PutNumber("DriveDistance1Ball", OneBallDistance);
-		dash->PutNumber("Kp1Ball", OneBallKp);
-		dash->PutNumber("Kd1Ball", OneBallKd);
+		//dash->PutNumber("Kp1Ball", OneBallKp);
+		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
 		ArmC = true;
 		shootbutton = false;
@@ -106,15 +106,63 @@ public:
 		myRobot.SetSafetyEnabled(false);
 		GetWatchdog().Feed();
 		
+		//If Auton is Enabled
 		if(Button_AutonSwitch){
-			if(j3.GetRawButton(7)){  //Fix command from sequential to concurent
+			// Shoot One!!!
+			if(j3.GetRawButton(j3.GetRawAxis(Axis_Horizontal) == 1)){  //Fix command from sequential to concurent
 				//Reseting Encoders
 				LDriveEnc.Reset();
 				RDriveEnc.Reset();
 				//Move forward 24 inches
 				const double kDriveDistance = dash->GetNumber("DriveDistance1Ball");
-				const double Kp = dash->GetNumber("Kp1Ball"); //proportional constant  Real Number in robotvalues
-				const double Kd = dash->GetNumber("Kd1Ball");;  //derivative constant           "   "
+				//const double Kp = 10.0; //proportional constant  Real Number in robotvalues
+				//const double Kd = 0.8;  //derivative constant           "   "
+				double last_error = 0.0;
+				// Kp, Kd from RobotValues.h
+				while (IsAutonomous() && IsEnabled()) {
+					const double error = kDriveDistance - (left_distance() + right_distance()) / 2.0;
+					const double drive_power = Kp * error + Kd * (error - last_error) * 100.0;
+					LeftDrive.SetSpeed(-drive_power);
+					RightDrive.SetSpeed(drive_power);
+					Wait(0.02);
+					printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
+					last_error = error;
+					if (error == 0) break;  //if in right spot, go to firing
+				}
+				
+				//fire after it moves forward
+				Shooter.update(true,
+					       LauncherBotm1.Get());
+				Winch.SetSpeed(Shooter.get_winch());
+				WinchPist.Set(Shooter.get_winchLock());				
+				
+				// Reset encoders to 0
+				LDriveEnc.Reset();
+				RDriveEnc.Reset();
+				const double kDriveDistance2 = -2.0;
+				last_error = 0;
+				while (IsAutonomous() && IsEnabled()) {
+					const double error = kDriveDistance2 - (left_distance() + right_distance()) / 2.0;
+					const double drive_power = Kp * error + Kd * (error - last_error) * 100.0;
+					LeftDrive.SetSpeed(-drive_power);
+					RightDrive.SetSpeed(drive_power);
+					Wait(0.02);
+					printf("error2 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
+					last_error = error;
+				}
+						
+			}
+			// Two Ball Auton
+			else if(j3.GetRawButton(j3.GetRawAxis(Axis_Horizontal) == -1)){
+				//two ball code here
+			}
+			// Drive Forward Auton
+			else if(j3.GetRawButton(j3.GetRawAxis(Axis_Verticle) == 1)){
+				LDriveEnc.Reset();
+				RDriveEnc.Reset();
+				const double kDriveDistance = -1.0;
+				//const double Kp = 10.0; //proportional constant 
+				//const double Kd = 0.8;  //derivative constant
 				double last_error = 0.0;
 				while (IsAutonomous() && IsEnabled()) {
 					const double error = kDriveDistance - (left_distance() + right_distance()) / 2.0;
@@ -122,40 +170,12 @@ public:
 					LeftDrive.SetSpeed(-drive_power);
 					RightDrive.SetSpeed(drive_power);
 					Wait(0.02);
-					printf("error %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
 					last_error = error;
-					if (error == 0) break;  //if in right spot, go to firing
 				}
-				//fire after it moves forward
-				Shooter.update(true,
-					       LauncherBotm1.Get());
-				Winch.SetSpeed(Shooter.get_winch());
-				WinchPist.Set(Shooter.get_winchLock());				
-				
 			}
-				else if(j3.GetRawButton(8)){
-					//two ball code here
-				}
-				else if(j3.GetRawButton(9)){
-					LDriveEnc.Reset();
-					RDriveEnc.Reset();
-					const double kDriveDistance = -3.15;
-					const double Kp = 10.0; //proportional constant 
-					const double Kd = 0.8;  //derivative constant
-					double last_error = 0.0;
-					while (IsAutonomous() && IsEnabled()) {
-						const double error = kDriveDistance - (left_distance() + right_distance()) / 2.0;
-						const double drive_power = Kp * error + Kd * (error - last_error) * 100.0;
-						LeftDrive.SetSpeed(-drive_power);
-						RightDrive.SetSpeed(drive_power);
-						Wait(0.02);
-						printf("error %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
-						last_error = error;
-					}
-				}
-				else if(j3.GetRawButton(10)){
-					 // straigt and turn
-				}
+			else if(j3.GetRawButton(j3.GetRawAxis(Axis_Verticle) == -1)){
+				 // straigt and turn
+			}
 		}
 	}
 	/*int switch1 = j3.GetRawAxis(5);
@@ -203,9 +223,9 @@ public:
 			IntakeArm.update(j3.GetRawButton(Button_Ejector), 
 							 j3.GetRawButton(Button_Inbound), 
 							 j3.GetRawButton(Button_Pickup) ||
-							 stickRight.GetRawButton(Button_DriverPickup));
-			IntakeArm.manual(j3.GetRawButton(Button_RollerIn), 
-							 j3.GetRawButton(Button_RollerOut), 
+							 stickRight.GetRawButton(Button_DriverPickup),
+							 j3.GetRawButton(Button_RollerIn),
+							 j3.GetRawButton(Button_RollerOut),
 							 j3.GetRawButton(Button_ArmDown));
 			Ejector.Set(IntakeArm.get_ejector());
 			ArmWheels.SetSpeed(IntakeArm.get_roller());
