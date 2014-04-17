@@ -40,6 +40,7 @@ static const double AutonTime = 2;
 static const double OneBallDistance = -0.6096;  // Two feet
 static const double Kp = 10.0;
 static const double Kd = 0.8;
+static const double driveTolerance = .005;
 
 
 

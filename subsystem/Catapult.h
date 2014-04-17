@@ -9,6 +9,7 @@ public:
 	void update(bool button_shoot, bool cancel);
 	float get_winch(void);
 	bool get_winchLock(void);
+	bool waitingToWinch(void);
 private:
 	enum State {
 		WINCHING,

@@ -52,6 +52,17 @@ bool Catapult::get_winchLock(void)  {
 	return out_winchLock;
 }
 
+bool Catapult::waitingToWinch(void){
+	if(state_== WAITING_TO_WINCH){
+		printf("In Waiting to Winch \n");
+		return true;
+	}else{
+		printf("Not in Waiting to Winch \n");
+		return false;
+	}	
+}
+
+
 
 /*
 Catapult::Catapult(Jaguar *winch, Solenoid* dogGear, DigitalInput* limitSwitch) {
