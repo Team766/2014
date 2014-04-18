@@ -94,6 +94,8 @@ public:
 		
 		dash->PutNumber("DriveDistance1Ball", OneBallDistance);
 		dash->PutNumber("DriveDistance2Ball", TwoBallDistance);
+		dash->PutNumber("ArmWaitforArm", ArmWaitforArm);
+		dash->PutNumber("ArmAfterFireWait", ArmAfterFireWait);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
@@ -114,8 +116,8 @@ public:
 				printf("One Ball Auton \n");
 				
 				//Move forward 24 inches
-				const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
-				autonDriveToDistance(kDriveDistance1);
+				//const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
+				//autonDriveToDistance(kDriveDistance1);
 				
 				printf("Ready to shoot \n");
 				
@@ -149,8 +151,8 @@ public:
 				printf("Two Ball Auton \n");
 				// Shoot Two!!!
 				//Move forward 24 inches
-				const double kDriveDistance = dash->GetNumber("DriveDistance2Ball");
-				autonDriveToDistance(kDriveDistance);
+				//const double kDriveDistance = dash->GetNumber("DriveDistance2Ball");
+				//autonDriveToDistance(kDriveDistance);
 
 				printf("Ready to shoot \n");
 								
@@ -166,12 +168,18 @@ public:
 					Wait(0.05);
 					//winch down
 					while(IsAutonomous() && IsEnabled()){
+						printf("Winching Down\n");
 						Shooter.update(false,
 						         	   !LauncherBotm1.Get());
 						Winch.SetSpeed(Shooter.get_winch());
 						WinchPist.Set(Shooter.get_winchLock());
 						if (!LauncherBotm1.Get()) break; //waits till winch is stopped to exit loop
 					}
+					
+					//turn off winch
+					printf("Winch successfully down");
+					Winch.SetSpeed(0);
+					WinchPist.Set(false);
 					
 								
 					// Move backwards 3 meters and collect
@@ -187,14 +195,15 @@ public:
 					*/
 					ArmWheels.SetSpeed(1);
 					Arm.Set(true);
+					Wait(dash->GetNumber("ArmWaitforArm"));
+					//autonDriveToDistance(kDriveDistance3); //move back 3 ft.
 					
-					autonDriveToDistance(kDriveDistance3); //move back 3 ft.
-					
+					//turn off arm and bring back up
 					ArmWheels.SetSpeed(0);
 					Arm.Set(ArmUp);
 								
-					autonDriveToDistance(-kDriveDistance3); //move forward 3 ft.
-					
+					//autonDriveToDistance(-kDriveDistance3); //move forward 3 ft.
+					Wait(dash->GetNumber("ArmAfterFireWait"));
 					//fire
 					while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
 						printf("In Shooter Loop \n");
@@ -207,7 +216,7 @@ public:
 					Wait(0.05);
 					
 					//forwards 2 meters to cross line for 5 extra points
-					autonDriveToDistance(-3.0);
+					autonDriveToDistance(-2.0);
 								
 					// Bring the shooter down
 					while(IsAutonomous() && IsEnabled()){

@@ -43,8 +43,10 @@ static const double Kp = 10.0;
 static const double Kd = 0.8;
 static const double driveTolerance = .005;
 static const double kDriveDistance3 = 0.9144;
-static const double kDriveDistance1P2 = -.5;
+static const double kDriveDistance1P2 = -2;
 static const double kDriveDistanceMoveAuton = -1.0;
+static const double ArmAfterFireWait = 2;
+static const double ArmWaitforArm = 3;
 
 
 
