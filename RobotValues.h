@@ -38,9 +38,13 @@ static const double LeftForPower = 0.5;
 static const double RightForPower = 0.5;
 static const double AutonTime = 2;
 static const double OneBallDistance = -0.6096;  // Two feet
+static const double TwoBallDistance = -0.6096;  // Two feet
 static const double Kp = 10.0;
 static const double Kd = 0.8;
 static const double driveTolerance = .005;
+static const double kDriveDistance3 = 0.9144;
+static const double kDriveDistance1P2 = -.5;
+static const double kDriveDistanceMoveAuton = -1.0;
 
 
 

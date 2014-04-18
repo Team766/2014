@@ -9,7 +9,6 @@ static const uint32_t Relay_Compr = 1;
 
 static const uint32_t DIO_Pressure = 5;
 static const uint32_t DIO_LauncherBotm1 = 12;
-static const uint32_t DIO_LauncherBotm2 = 12;
 static const uint32_t DIO_ShooterS = 11;
 static const uint32_t DIO_REncA = 14;
 static const uint32_t DIO_REncB = 13;

@@ -62,8 +62,6 @@ bool Catapult::waitingToWinch(void){
 	}	
 }
 
-
-
 /*
 Catapult::Catapult(Jaguar *winch, Solenoid* dogGear, DigitalInput* limitSwitch) {
 	this->winch = winch;

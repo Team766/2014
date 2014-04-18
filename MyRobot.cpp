@@ -28,7 +28,6 @@ class RobotDemo : public SimpleRobot
 	
 	DigitalInput Presr;
 	DigitalInput LauncherBotm1;
-	DigitalInput LauncherBotm2;
 	
 	Solenoid Shifter;
 	Solenoid WinchPist;
@@ -67,7 +66,6 @@ public:
 		// Digital 
 		Presr(DIO_Pressure),
 		LauncherBotm1(DIO_LauncherBotm1),
-		LauncherBotm2(DIO_LauncherBotm2),
 		//ShooterS(DIO_ShooterS),
 		
 		// Solenoids
@@ -95,6 +93,7 @@ public:
 		RDriveEnc.Start();
 		
 		dash->PutNumber("DriveDistance1Ball", OneBallDistance);
+		dash->PutNumber("DriveDistance2Ball", TwoBallDistance);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
@@ -115,8 +114,8 @@ public:
 				printf("One Ball Auton \n");
 				
 				//Move forward 24 inches
-				const double kDriveDistance = dash->GetNumber("DriveDistance1Ball");
-				autonDriveToDistance(kDriveDistance);
+				const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
+				autonDriveToDistance(kDriveDistance1);
 				
 				printf("Ready to shoot \n");
 				
@@ -124,23 +123,22 @@ public:
 				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
 					printf("In Shooter Loop \n");
 					Shooter.update(true,
-							LauncherBotm1.Get());
+							       !LauncherBotm1.Get());
 					Winch.SetSpeed(Shooter.get_winch());
-					WinchPist.Set(Shooter.get_winchLock());				
+					WinchPist.Set(Shooter.get_winchLock());
 				}
 				
 				Wait(0.05);
 				
 				// Move forward again
-				const double kDriveDistance2 = -.5;
-				autonDriveToDistance(kDriveDistance2);
+				autonDriveToDistance(kDriveDistance1P2);
 				
 				printf("Ready to Winch \n");
 				
 				// Bring the shooter down
 				while(IsAutonomous() && IsEnabled()){
 					Shooter.update(false,
-							LauncherBotm1.Get());
+							!LauncherBotm1.Get());
 					Winch.SetSpeed(Shooter.get_winch());
 					WinchPist.Set(Shooter.get_winchLock());
 				}
@@ -149,14 +147,82 @@ public:
 			// Two Ball Auton
 			else if(j3.GetRawAxis(Axis_Horizontal) == -1){
 				printf("Two Ball Auton \n");
-				//two ball code here
+				// Shoot Two!!!
+				//Move forward 24 inches
+				const double kDriveDistance = dash->GetNumber("DriveDistance2Ball");
+				autonDriveToDistance(kDriveDistance);
+
+				printf("Ready to shoot \n");
+								
+					//fire after it moves forward (stop when reached waitingToWinch in state machine)
+					while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
+						printf("In Shooter Loop \n");
+						Shooter.update(true,
+									   !LauncherBotm1.Get());
+						Winch.SetSpeed(Shooter.get_winch());
+						WinchPist.Set(Shooter.get_winchLock());				
+					}
+								
+					Wait(0.05);
+					//winch down
+					while(IsAutonomous() && IsEnabled()){
+						Shooter.update(false,
+						         	   !LauncherBotm1.Get());
+						Winch.SetSpeed(Shooter.get_winch());
+						WinchPist.Set(Shooter.get_winchLock());
+						if (!LauncherBotm1.Get()) break; //waits till winch is stopped to exit loop
+					}
+					
+								
+					// Move backwards 3 meters and collect
+					/*IntakeArm.update(false, 
+									 false, 
+									 true,
+									 false,
+									 false,
+									 false);
+					
+					ArmWheels.SetSpeed(IntakeArm.get_roller());
+					Arm.Set(IntakeArm.get_armpist());
+					*/
+					ArmWheels.SetSpeed(1);
+					Arm.Set(true);
+					
+					autonDriveToDistance(kDriveDistance3); //move back 3 ft.
+					
+					ArmWheels.SetSpeed(0);
+					Arm.Set(ArmUp);
+								
+					autonDriveToDistance(-kDriveDistance3); //move forward 3 ft.
+					
+					//fire
+					while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
+						printf("In Shooter Loop \n");
+						Shooter.update(true,
+									   !LauncherBotm1.Get());
+						Winch.SetSpeed(Shooter.get_winch());
+						WinchPist.Set(Shooter.get_winchLock());				
+					}
+													
+					Wait(0.05);
+					
+					//forwards 2 meters to cross line for 5 extra points
+					autonDriveToDistance(-3.0);
+								
+					// Bring the shooter down
+					while(IsAutonomous() && IsEnabled()){
+						Shooter.update(false,
+						         	   !LauncherBotm1.Get());
+						Winch.SetSpeed(Shooter.get_winch());
+						WinchPist.Set(Shooter.get_winchLock());
+					}
+								
 			}
 			// Drive Forward Auton
 			else if(j3.GetRawAxis(Axis_Verticle) == 1){
 				printf("Drive Forward Auton \n");
 				
-				const double kDriveDistance = -1.0;
-				autonDriveToDistance(kDriveDistance);
+				autonDriveToDistance(kDriveDistanceMoveAuton);
 			}
 			else if(j3.GetRawAxis(Axis_Verticle) == -1){
 				printf("Brett hasn't told me auton \n");
@@ -203,7 +269,7 @@ public:
 			//Catapult Controls
 			Shooter.update(stickRight.GetRawButton(Button_DriverShoot) ||
 					       j3.GetRawButton(Button_ShooterLaunch),
-					       LauncherBotm1.Get() ||
+					       !LauncherBotm1.Get() ||
 					       j3.GetRawButton(Button_Cancel));
 			Winch.SetSpeed(Shooter.get_winch());
 			WinchPist.Set(Shooter.get_winchLock());
@@ -248,7 +314,7 @@ public:
 			LeftDrive.SetSpeed(-drive_power);
 			RightDrive.SetSpeed(drive_power);
 			Wait(0.02);
-			printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
+			//printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
 			last_error = error;
 			// Figure out a nicer way to do this later
 			if (fabs(error) <= (0 + driveTolerance)){
