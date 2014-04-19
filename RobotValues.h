@@ -23,11 +23,16 @@ static const bool EjectorIn = false;
 //Arm Piston
 static const bool ArmUp = false;
 static const bool ArmDown = true;
+static const bool GuardsIn = false;
+static const bool GuardsOut = true;
+
+static const bool GoaliePoleDown = false;
+static const bool GoaliePoleUp = true;
 
 //Catapult
 static const bool CatapultLocked = false;
 static const bool CatapultUnlocked = true;
-static const double WaitAfterFire = 0.75;
+static const double WaitAfterFire = 1.0;  //0.75
 
 //Timers
 static const int CatapultTimer = 1;
@@ -37,16 +42,16 @@ static const int CatapultTimer = 1;
 static const double LeftForPower = 0.5;
 static const double RightForPower = 0.5;
 static const double AutonTime = 2;
-static const double OneBallDistance = -0.6096;  // Two feet
-static const double TwoBallDistance = -0.6096;  // Two feet
-static const double Kp = 10.0;
-static const double Kd = 0.8;
+//static const double OneBallDistance = -0.6096;  // Two feet
+//static const double TwoBallDistance = 0.0;  // Two feet
+static const double DriveDistanceFireZone = 0.0;  //Any Auton that fires
+static const double Kp = 10.0;  //leave alone
+static const double Kd = 0.8;  //  leave alone
 static const double driveTolerance = .005;
-static const double kDriveDistance3 = 0.9144;
-static const double kDriveDistance1P2 = -2;
-static const double kDriveDistanceMoveAuton = -1.0;
+static const double kDriveDistance2MovetoGetBall = 0.0; //0.9144 Two Ball
+static const double kDriveDistance1P2 = -2.0;
+static const double kDriveDistanceMoveAuton = -1.0; 
 static const double ArmAfterFireWait = 2;
 static const double ArmWaitforArm = 3;
-
-
-
+static const double TurnRightDistance = -0.5;
+static const double MoveForwardDistance = -2.0;

@@ -59,6 +59,7 @@ static const uint32_t Button_Pickup = 4;
 static const uint32_t Button_Inbound = 6;
 static const uint32_t Button_Ejector = 11;
 static const uint32_t Button_ArmDown = 12;
+static const uint32_t Button_GoaliePole = 10;
 
 static const uint32_t Button_AutonSwitch = 7;
 static const uint32_t Axis_Horizontal = 5;

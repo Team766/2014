@@ -10,6 +10,7 @@ public:
 	float get_winch(void);
 	bool get_winchLock(void);
 	bool waitingToWinch(void);
+	bool waitingToFire(void);
 private:
 	enum State {
 		WINCHING,

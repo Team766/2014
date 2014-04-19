@@ -1,7 +1,13 @@
 #include "Intake.h"
 #include "../RobotValues.h"
 
-void Intake::update(bool button_eject, bool button_inbound, bool button_intake, bool button_in, bool button_out, bool button_arm)  {
+void Intake::update(bool button_eject, 
+					bool button_inbound, 
+					bool button_intake, 
+					bool button_in, 
+					bool button_out, 
+					bool button_arm,
+					float axis_ballguards)  {
 	
 	// piston in
 	bool ejectorC = EjectorIn;
@@ -9,7 +15,8 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake, 
 	float rollerC = RollerOffSpeed;
 	// arm up
 	bool armpistC = ArmUp;
-	
+	//ball guards in
+	bool ballguardC = GuardsIn;
 
 	if(button_eject){
 		printf("Eject \n");
@@ -30,6 +37,10 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake, 
 		//Roller In
 		rollerC = RollerInSpeed;
 	}
+	if(axis_ballguards < 0){
+		ballguardC = GuardsOut;
+	}
+
 	
 	if(button_in) rollerC = RollerInSpeed;
 	if(button_out) rollerC = RollerOutSpeed;
@@ -38,6 +49,7 @@ void Intake::update(bool button_eject, bool button_inbound, bool button_intake, 
 	out_ejector = ejectorC;
 	out_roller = rollerC;
 	out_armpist = armpistC;
+	out_guardpist = ballguardC;
 }
 bool Intake::get_ejector(void)  {
 	return out_ejector;
@@ -48,7 +60,9 @@ float Intake::get_roller(void)  {
 bool Intake::get_armpist(void)  {
 	return out_armpist;
 }
-
+bool Intake::get_guardpist(void) {
+	return out_guardpist;
+}
 
 
 

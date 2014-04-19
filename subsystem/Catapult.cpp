@@ -61,6 +61,15 @@ bool Catapult::waitingToWinch(void){
 		return false;
 	}	
 }
+bool Catapult::waitingToFire(void){
+	if(state_== READY_TO_FIRE){
+		printf("Ready to Fire \n");
+		return true;
+	}else{
+		printf("Not in Ready to Fire \n");
+		return false;
+	}	
+}
 
 /*
 Catapult::Catapult(Jaguar *winch, Solenoid* dogGear, DigitalInput* limitSwitch) {

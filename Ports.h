@@ -20,6 +20,7 @@ static const uint32_t Sol_WinchPist = 2;
 static const uint32_t Sol_Arm = 3;
 static const uint32_t Sol_BallGuard = 4;
 static const uint32_t Sol_Ejector = 5;
+static const uint32_t Sol_GoaliePole = 6;
 
 
 static const uint32_t Sol_WinchPistO = 7;
