@@ -178,10 +178,20 @@ SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Intake.o : $(PRJ_
 	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc $(DEBUGFLAGS_C++-Compiler) $(CC_ARCH_SPEC) -ansi -Wall  -MD -MP -mlongcall $(ADDED_C++FLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES) -o "$@" -c "$<"
 
 
+SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/CheesyVisionServer.o : $(PRJ_ROOT_DIR)/util/CheesyVisionServer.cpp $(FORCE_FILE_BUILD)
+	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc $(DEBUGFLAGS_C++-Compiler) $(CC_ARCH_SPEC) -ansi -Wall  -MD -MP -mlongcall $(ADDED_C++FLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES) -o "$@" -c "$<"
+
+
+SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/jankyTask.o : $(PRJ_ROOT_DIR)/util/jankyTask.cpp $(FORCE_FILE_BUILD)
+	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc $(DEBUGFLAGS_C++-Compiler) $(CC_ARCH_SPEC) -ansi -Wall  -MD -MP -mlongcall $(ADDED_C++FLAGS) $(IDE_INCLUDES) $(ADDED_INCLUDES) -DCPU=$(CPU) -DTOOL_FAMILY=$(TOOL_FAMILY) -DTOOL=$(TOOL) -D_WRS_KERNEL   $(DEFINES) -o "$@" -c "$<"
+
+
 OBJECTS_SimpleTemplate_partialImage = SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/CheezyDrive.o \
 	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/MyRobot.o \
 	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Catapult.o \
-	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Intake.o
+	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Intake.o \
+	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/CheesyVisionServer.o \
+	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/jankyTask.o
 
 SimpleTemplate_partialImage/$(MODE_DIR)/SimpleTemplate_partialImage.o : $(OBJECTS_SimpleTemplate_partialImage)
 	$(TRACE_FLAG)if [ ! -d "`dirname "$@"`" ]; then mkdir -p "`dirname "$@"`"; fi;echo "building $@"; $(TOOL_PATH)ccppc -r -nostdlib -Wl,-X  -o "$@" $(OBJECTS_SimpleTemplate_partialImage) $(LIBPATH) $(LIBS) $(ADDED_LIBPATH) $(ADDED_LIBS)  && if [ "$(EXPAND_DBG)" = "1" ]; then plink "$@";fi
@@ -196,7 +206,7 @@ SimpleTemplate_partialImage/$(MODE_DIR)/SimpleTemplate_partialImage_clean :
 force : 
 
 DEP_FILES := SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/CheezyDrive.d SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/MyRobot.d SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Catapult.d \
-	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Intake.d
+	 SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/subsystem/Intake.d SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/CheesyVisionServer.d SimpleTemplate_partialImage/$(MODE_DIR)/Objects/2014/util/jankyTask.d
 -include $(DEP_FILES)
 
 

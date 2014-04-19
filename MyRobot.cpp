@@ -9,6 +9,7 @@
 #include <math.h>
 #include "subsystem/Intake.h"
 #include "subsystem/Catapult.h"
+#include "util/CheesyVisionServer.h"
 
 SmartDashboard *dash;
 
@@ -39,6 +40,7 @@ class RobotDemo : public SimpleRobot
 	Encoder LDriveEnc;
 	Encoder RDriveEnc;
 	
+	CheesyVisionServer *cheesyVision;
 	CheezyDrive chezyDrive;
 	Intake IntakeArm;
 	Catapult Shooter;
@@ -80,7 +82,7 @@ public:
 	    RDriveEnc(DIO_REncA, DIO_REncB),
 		chezyDrive()
 	{
-		printf("2014 Code Version 1.3\n");
+		printf("2014 Code Version 1.4\n");
 		myRobot.SetExpiration(0.1);
 		GetWatchdog().Feed();
 		dash->init();
@@ -94,23 +96,29 @@ public:
 		dash->PutNumber("DriveDistanceFireZone", DriveDistanceFireZone);
 		dash->PutNumber("ArmWaitforArm", ArmWaitforArm);
 		dash->PutNumber("ArmAfterFireWait", ArmAfterFireWait);
+		dash->PutNumber("kDriveDistance2MovetoGetBall", kDriveDistance2MovetoGetBall);
+		dash->PutNumber("kDriveDistance1P2", kDriveDistance1P2);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
 		ArmC = true;
 		shootbutton = false;
+		
+		cheesyVision = cheesyVision->GetInstance();
+		cheesyVision->Run();
 	}
 	void Autonomous(void)
 	{
 		myRobot.SetSafetyEnabled(false);
 		GetWatchdog().Feed();
-		
+		cheesyVision->Reset();
+		cheesyVision->StartSamplingCounts();
 		//If Auton is Enabled
 		if(j3.GetRawButton(Button_AutonSwitch)){
 			printf("Auton Enabled \n");
-			
+			BallGuard.Set(GuardsIn);
 			// Shoot One!!!
-			if(j3.GetRawAxis(Axis_Horizontal) == 1){  //Fix command from sequential to concurent
+			if(j3.GetRawAxis(Axis_Horizontal) > 0){  //Fix command from sequential to concurent
 				printf("One Ball Auton \n");
 				
 				//Move forward __ inches
@@ -131,7 +139,7 @@ public:
 				Wait(0.05);
 				
 				// Move forward again to cross line
-				autonDriveToDistance(kDriveDistance1P2);
+				autonDriveToDistance(dash->GetNumber("kDriveDistance1P2"));
 				
 				printf("Ready to Winch \n");
 				
@@ -145,12 +153,12 @@ public:
 				
 			}
 			// Two Ball Auton
-			else if(j3.GetRawAxis(Axis_Horizontal) == -1){
+			else if(j3.GetRawAxis(Axis_Horizontal) < 0){
 				printf("Two Ball Auton \n");
 				// Shoot Two!!!
 				//Move forward to shooting spot
 				autonDriveToDistance(dash->GetNumber("DriveDistanceFireZone"));
-
+				Wait(WaitBeforeFiring);
 				printf("Ready to shoot \n");
 								
 					//fire after it moves forward (stop when reached waitingToWinch in state machine)
@@ -175,13 +183,13 @@ public:
 				ArmWheels.SetSpeed(RollerInSpeed);
 				Arm.Set(ArmDown);
 				Wait(dash->GetNumber("ArmWaitforArm"));
-				autonDriveToDistance(kDriveDistance2MovetoGetBall); //move back 3 ft.
+				autonDriveToDistance(dash->GetNumber("kDriveDistance2MovetoGetBall")); //move back 3 ft.
 				
 				//turn off arm and bring back up
 				ArmWheels.SetSpeed(RollerOffSpeed); //0
 				Arm.Set(ArmUp);
 								
-				autonDriveToDistance(-kDriveDistance2MovetoGetBall); //move forward 3 ft.
+				autonDriveToDistance(-dash->GetNumber("kDriveDistance2MovetoGetBall")); //move forward 3 ft.
 				Wait(dash->GetNumber("ArmAfterFireWait"));
 				//fire
 				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
@@ -206,15 +214,30 @@ public:
 				}				
 			}
 			// Drive Forward Auton
-			else if(j3.GetRawAxis(Axis_Verticle) == 1){
+			else if(j3.GetRawAxis(Axis_Verticle) > 0){
+				//printf("One Ball Hot Auton");
 				printf("Drive Forward Auton \n");
 				autonDriveToDistance(kDriveDistanceMoveAuton);
+				/*
+				autonDriveToDistance(kDriveDistanceMoveAuton);
+				while(IsAutonomous() && IsEnabled()){
+					if(cheesyVision->GetTotalCount() >= 5){
+						printf("In cheesyVision Runner");
+						while(IsAutonomous() && IsEnabled()){
+							Shooter.update(true,
+										   !LauncherBotm1.Get());
+							Winch.SetSpeed(Shooter.get_winch());
+							WinchPist.Set(Shooter.get_winchLock());
+						}
+					}
+				}
+				*/
 			}
-			else if(j3.GetRawAxis(Axis_Verticle) == -1){
+			else if(j3.GetRawAxis(Axis_Verticle) < 0){
 				//Read Cheesy Vision and pick turn mode
 				// turn left or turn right , then drive straight
 				printf("Turn Right then Drive Straight Auton\n");
-				autonTurnRightToDistance(TurnRightDistance);  //Turn 0.5
+				//autonTurnRightToDistance(TurnRightDistance);  //Turn 0.5
 				autonDriveToDistance(MoveForwardDistance);  //Forward 2 Meters
 				
 			}
@@ -312,10 +335,11 @@ public:
 			LeftDrive.SetSpeed(-drive_power);
 			RightDrive.SetSpeed(drive_power);
 			Wait(0.02);
-			//printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
+			printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
 			last_error = error;
-			// Figure out a nicer way to do this later
+			// If at 0 +- tolerance, stop driving
 			if (fabs(error) <= (0 + driveTolerance)){
+				printf("Break Drive To Distance \n");
 				LeftDrive.SetSpeed(0);
 				RightDrive.SetSpeed(0);
 				break;  //if in right spot, go to firing
@@ -333,7 +357,7 @@ public:
 		double last_error = 0.0;
 		// Kp, Kd from RobotValues.h
 		while (IsAutonomous() && IsEnabled()) {
-			const double error = kDriveDistance - (left_distance() + right_distance()) / 2.0;
+			const double error = kDriveDistance - (left_distance() - right_distance()) / 2.0;
 			const double drive_power = Kp * error + Kd * (error - last_error) * 100.0;
 			LeftDrive.SetSpeed(-drive_power);
 			RightDrive.SetSpeed(-drive_power);
@@ -359,7 +383,7 @@ public:
 		double last_error = 0.0;
 		// Kp, Kd from RobotValues.h
 		while (IsAutonomous() && IsEnabled()) {
-			const double error = kDriveDistance - (left_distance() + right_distance()) / 2.0;
+			const double error = kDriveDistance - (-left_distance() + right_distance()) / 2.0;
 			const double drive_power = Kp * error + Kd * (error - last_error) * 100.0;
 			LeftDrive.SetSpeed(drive_power);
 			RightDrive.SetSpeed(drive_power);

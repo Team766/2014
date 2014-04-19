@@ -19,7 +19,6 @@ void Intake::update(bool button_eject,
 	bool ballguardC = GuardsIn;
 
 	if(button_eject){
-		printf("Eject \n");
 		//piston out
 		ejectorC = EjectorOut;
 		//Roller Out
