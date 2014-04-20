@@ -100,6 +100,8 @@ public:
 		dash->PutNumber("Auton 2: Move Forward to Get Ball", kDriveDistance2MoveForwardtoGetBall);
 		dash->PutNumber("Auton 2: Wait Before Firing", WaitBeforeFiring);
 		dash->PutNumber("Auton 2: Line Cross", MoveForwardDistance);
+		dash->PutNumber("Auton 1: Line Cross", kDriveDistance1P2);
+		dash->PutNumber("OneBallMoveToFire", OneBallMoveToFire);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
@@ -136,7 +138,7 @@ public:
 				Wait(0.05);
 				
 				// Move forward again to cross line
-				autonDriveToDistance(kDriveDistance1P2);
+				autonDriveToDistance(dash->GetNumber("Auton 1: Line Cross"));
 				
 				printf("Ready to Winch \n");
 				
@@ -218,7 +220,7 @@ public:
 								
 				//Move forward __ inches
 				//const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
-				autonDriveToDistance(OneBallMoveToFire);
+				autonDriveToDistance(dash->GetNumber("OneBallMoveToFire"));
 							
 				printf("Ready to shoot \n");
 								
