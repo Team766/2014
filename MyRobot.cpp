@@ -100,7 +100,6 @@ public:
 		dash->PutNumber("Auton 2: Move Forward to Get Ball", kDriveDistance2MoveForwardtoGetBall);
 		dash->PutNumber("Auton 2: Wait Before Firing", WaitBeforeFiring);
 		dash->PutNumber("Auton 2: Line Cross", MoveForwardDistance);
-		dash->PutNumber("Auton 1: Line Cross", kDriveDistance1P2);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
@@ -123,11 +122,6 @@ public:
 			// Shoot One!!!
 			if(j3.GetRawAxis(Axis_Horizontal) > 0){  //Fix command from sequential to concurent
 				printf("One Ball Auton \n");
-				
-				//Move forward __ inches
-				//const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
-				autonDriveToDistance(dash->GetNumber("Drive Distance to Fire Zone"));
-				
 				printf("Ready to shoot \n");
 					
 				//fire after it moves forward (stop when reached waitingToWinch in state machine)
@@ -142,7 +136,7 @@ public:
 				Wait(0.05);
 				
 				// Move forward again to cross line
-				autonDriveToDistance(dash->GetNumber("Auton 1: Line Cross"));
+				autonDriveToDistance(kDriveDistance1P2);
 				
 				printf("Ready to Winch \n");
 				
@@ -218,24 +212,35 @@ public:
 				//printf("One Ball Hot Auton");
 				printf("Drive Forward Auton \n");
 				autonDriveToDistance(kDriveDistanceMoveAuton);
-				/*
-				autonDriveToDistance(kDriveDistanceMoveAuton);
-				while(IsAutonomous() && IsEnabled()){
-					if(cheesyVision->GetTotalCount() >= 5){
-						printf("In cheesyVision Runner");
-						while(IsAutonomous() && IsEnabled()){
-							Shooter.update(true,
-										   !LauncherBotm1.Get());
-							Winch.SetSpeed(Shooter.get_winch());
-							WinchPist.Set(Shooter.get_winchLock());
-						}
-					}
-				}
-				*/
 			}
 			else if(j3.GetRawAxis(Axis_Verticle) < 0){
-				//Hot Goal One Ball
-				printf("In Hot Goal One Ball Auton");	
+				printf("One Ball Move Auton \n");
+								
+				//Move forward __ inches
+				//const double kDriveDistance1 = dash->GetNumber("DriveDistance1Ball");
+				autonDriveToDistance(OneBallMoveToFire);
+							
+				printf("Ready to shoot \n");
+								
+				//fire after it moves forward (stop when reached waitingToWinch in state machine)
+				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
+					printf("In Shooter Loop \n");
+					Shooter.update(true,
+								   !LauncherBotm1.Get());
+					Winch.SetSpeed(Shooter.get_winch());
+					WinchPist.Set(Shooter.get_winchLock());
+				}
+						
+				Wait(0.05);
+				printf("Ready to Winch \n");
+								
+				// Bring the shooter down
+				while(IsAutonomous() && IsEnabled()){
+					Shooter.update(false,
+								   !LauncherBotm1.Get());
+					Winch.SetSpeed(Shooter.get_winch());
+					WinchPist.Set(Shooter.get_winchLock());
+				}
 			}
 			else{
 				printf("No Auton Selected \n");

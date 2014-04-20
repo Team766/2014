@@ -56,4 +56,5 @@ static const double ArmWaitforArm = 2.0;
 static const double TurnRightDistance = -0.05;
 static const double MoveForwardDistance = -2.0;
 static const double WaitBeforeFiring = 0.0;
-static const double kDriveDistance2MoveForwardtoGetBall = 0.0;
+static const double kDriveDistance2MoveForwardtoGetBall = -2.5;
+static const double OneBallMoveToFire = -2.5;
