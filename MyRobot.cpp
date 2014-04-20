@@ -9,7 +9,6 @@
 #include <math.h>
 #include "subsystem/Intake.h"
 #include "subsystem/Catapult.h"
-#include "util/CheesyVisionServer.h"
 
 SmartDashboard *dash;
 
@@ -35,12 +34,10 @@ class RobotDemo : public SimpleRobot
 	Solenoid Arm;
 	Solenoid BallGuard;
 	Solenoid Ejector;
-	Solenoid GoaliePole;
 	
 	Encoder LDriveEnc;
 	Encoder RDriveEnc;
 	
-	CheesyVisionServer *cheesyVision;
 	CheezyDrive chezyDrive;
 	Intake IntakeArm;
 	Catapult Shooter;
@@ -75,14 +72,13 @@ public:
 		Arm(Sol_Arm),
 	    BallGuard(Sol_BallGuard),
 	    Ejector(Sol_Ejector),
-	    GoaliePole(Sol_GoaliePole),
 	    
 	    //Encoders
 	    LDriveEnc(DIO_LEncA, DIO_LEncB),
 	    RDriveEnc(DIO_REncA, DIO_REncB),
 		chezyDrive()
 	{
-		printf("2014 Code Version 1.4\n");
+		printf("2014 Code Version 1.5\n");
 		myRobot.SetExpiration(0.1);
 		GetWatchdog().Feed();
 		dash->init();
@@ -107,22 +103,18 @@ public:
 		
 		ArmC = true;
 		shootbutton = false;
-		
-		cheesyVision = cheesyVision->GetInstance();
-		cheesyVision->Run();
+
 	}
 	void Autonomous(void)
 	{
 		myRobot.SetSafetyEnabled(false);
 		GetWatchdog().Feed();
-		cheesyVision->Reset();
-		cheesyVision->StartSamplingCounts();
 		//If Auton is Enabled
 		if(j3.GetRawButton(Button_AutonSwitch)){
 			printf("Auton Enabled \n");
 			BallGuard.Set(GuardsIn);
 			// Shoot One!!!
-			if(j3.GetRawAxis(Axis_Horizontal) > 0){  //Fix command from sequential to concurent
+			if(j3.GetRawAxis(Axis_Horizontal) < 0){  //Fix command from sequential to concurent
 				printf("One Ball Auton \n");
 				printf("Ready to shoot \n");
 					
@@ -151,7 +143,7 @@ public:
 				}
 			}
 			// Two Ball Auton
-			else if(j3.GetRawAxis(Axis_Horizontal) < 0){
+			else if(j3.GetRawAxis(Axis_Verticle) > 0){
 				printf("Two Ball Auton \n");
 				// Shoot Two!!!
 				//Move forward to shooting spot
@@ -210,7 +202,7 @@ public:
 					}
 			}
 			// Drive Forward Auton
-			else if(j3.GetRawAxis(Axis_Verticle) > 0){
+			else if(j3.GetRawAxis(Axis_Horizontal) > 0){
 				//printf("One Ball Hot Auton");
 				printf("Drive Forward Auton \n");
 				autonDriveToDistance(kDriveDistanceMoveAuton);
@@ -295,12 +287,6 @@ public:
 			//Compressor
 			Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
 			
-			if(j3.GetRawButton(Button_GoaliePole)){
-				GoaliePole.Set(GoaliePoleDown);
-			}
-			else{
-				GoaliePole.Set(GoaliePoleUp);
-			}
 			GetWatchdog().Feed();
 			Wait(0.005);
 			
