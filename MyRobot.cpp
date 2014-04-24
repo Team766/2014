@@ -89,9 +89,9 @@ public:
 		
 		//dash->PutNumber("DriveDistance1Ball", OneBallDistance);
 		dash->PutNumber("Auton 2: Drive Distance to Fire Zone", DriveDistanceFireZone);
-		dash->PutNumber("Auton 2: Wait for Arm", ArmWaitforArm);
-		dash->PutNumber("Auton 2: Arm After Fire Wait", ArmAfterFireWait);
-		dash->PutNumber("Auton 2: Move to Get Ball", kDriveDistance2MovetoGetBall);
+		dash->PutNumber("Auton 2: Wait for Arm Up", ArmWaitforArm);
+		dash->PutNumber("Auton 2: Arm Before Fire Wait", ArmAfterFireWait);
+		dash->PutNumber("Auton 2: Move to Get Ball", kDriveDistance2MovetoGetBall);  //Move Backwards
 		dash->PutNumber("Auton 2: Move Forward to Get Ball", kDriveDistance2MoveForwardtoGetBall);
 		dash->PutNumber("Auton 2: Wait Before Firing", WaitBeforeFiring);
 		dash->PutNumber("Auton 2: Line Cross", MoveForwardDistance);
@@ -170,7 +170,7 @@ public:
 
 				ArmWheels.SetSpeed(RollerInSpeed);
 				Arm.Set(ArmDown);
-				Wait(dash->GetNumber("Auton 2: Wait for Arm"));
+				Wait(dash->GetNumber("Auton 2: Wait for Arm Up"));
 				autonDriveToDistance(dash->GetNumber("Auton 2: Move to Get Ball")); //move back 3 ft.
 														
 				//turn off arm and bring back up
@@ -178,7 +178,7 @@ public:
 			    Arm.Set(ArmUp);
 																
 			    autonDriveToDistance(dash->GetNumber("Auton 2: Move Forward to Get Ball")); //move forward 3 ft.
-				Wait(dash->GetNumber("Auton 2: Arm After Fire Wait"));
+				Wait(dash->GetNumber("Auton 2: Arm Before Fire Wait"));
 				//fire
 				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
 					printf("In Shooter Loop \n");
