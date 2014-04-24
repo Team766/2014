@@ -240,7 +240,7 @@ public:
 			}
 		}
 	}
-
+	
 	void OperatorControl(void)
 	{
 		myRobot.SetSafetyEnabled(false);
@@ -323,7 +323,7 @@ public:
 			LeftDrive.SetSpeed(-drive_power);
 			RightDrive.SetSpeed(drive_power);
 			Wait(0.02);
-			printf("error1 %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
+			printf("error %f drive_power %f ld %f rd %f\n", error, drive_power, left_distance(), right_distance());
 			last_error = error;
 			// If at 0 +- tolerance, stop driving
 			if (fabs(error) <= (0 + driveTolerance)){
