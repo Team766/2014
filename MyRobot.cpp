@@ -64,7 +64,6 @@ public:
 		// Digital 
 		Presr(DIO_Pressure),
 		LauncherBotm1(DIO_LauncherBotm1),
-		//ShooterS(DIO_ShooterS),
 		
 		// Solenoids
 		Shifter(Sol_Shifter),

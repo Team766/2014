@@ -52,14 +52,12 @@ static const uint32_t Axis_BallGuard = 4;
 
 static const uint32_t Button_ShooterLaunch = 1;
 static const uint32_t Button_Cancel = 2;
-static const uint32_t Button_WinchOn = 2;
 static const uint32_t Button_RollerIn = 3;
 static const uint32_t Button_RollerOut = 5;
 static const uint32_t Button_Pickup = 4;
 static const uint32_t Button_Inbound = 6;
 static const uint32_t Button_Ejector = 11;
 static const uint32_t Button_ArmDown = 12;
-static const uint32_t Button_GoaliePole = 10;
 
 static const uint32_t Button_AutonSwitch = 7;
 static const uint32_t Axis_Horizontal = 5;
