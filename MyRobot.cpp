@@ -88,7 +88,7 @@ public:
 		RDriveEnc.Start();
 		
 		//dash->PutNumber("DriveDistance1Ball", OneBallDistance);
-		dash->PutNumber("Drive Distance to Fire Zone", DriveDistanceFireZone);
+		dash->PutNumber("Auton 2: Drive Distance to Fire Zone", DriveDistanceFireZone);
 		dash->PutNumber("Auton 2: Wait for Arm", ArmWaitforArm);
 		dash->PutNumber("Auton 2: Arm After Fire Wait", ArmAfterFireWait);
 		dash->PutNumber("Auton 2: Move to Get Ball", kDriveDistance2MovetoGetBall);
@@ -146,7 +146,7 @@ public:
 				printf("Two Ball Auton \n");
 				// Shoot Two!!!
 				//Move forward to shooting spot
-				autonDriveToDistance(dash->GetNumber("Drive Distance to Fire Zone"));
+				autonDriveToDistance(dash->GetNumber("Auton 2: Drive Distance to Fire Zone"));
 				Wait(dash->GetNumber("Auton 2: Wait Before Firing"));
 				printf("Ready to shoot \n");
 														
