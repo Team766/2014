@@ -174,10 +174,12 @@ public:
 				autonDriveToDistance(dash->GetNumber("Auton 2: Move to Get Ball")); //move back 3 ft.
 														
 				//turn off arm and bring back up
+				BallGuard.Set(GuardsOut);
 				ArmWheels.SetSpeed(RollerOffSpeed); //0
 			    Arm.Set(ArmUp);
 																
 			    autonDriveToDistance(dash->GetNumber("Auton 2: Move Forward to Get Ball")); //move forward 3 ft.
+			    BallGuard.Set(GuardsIn);
 				Wait(dash->GetNumber("Auton 2: Arm Before Fire Wait"));
 				//fire
 				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
