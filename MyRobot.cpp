@@ -167,7 +167,7 @@ public:
 					Winch.SetSpeed(Shooter.get_winch());
 					WinchPist.Set(Shooter.get_winchLock());
 				}
-
+				
 				ArmWheels.SetSpeed(RollerInSpeed);
 				Arm.Set(ArmDown);
 				Wait(dash->GetNumber("Auton 2: Wait for Arm Up"));
@@ -177,7 +177,8 @@ public:
 				BallGuard.Set(GuardsOut);
 				ArmWheels.SetSpeed(RollerOffSpeed); //0
 			    Arm.Set(ArmUp);
-																
+			    //Wait for error
+				Wait(0.05);	
 			    autonDriveToDistance(dash->GetNumber("Auton 2: Move Forward to Get Ball")); //move forward 3 ft.
 			    BallGuard.Set(GuardsIn);
 				Wait(dash->GetNumber("Auton 2: Arm Before Fire Wait"));
@@ -216,7 +217,9 @@ public:
 				autonDriveToDistance(dash->GetNumber("OneBallMoveToFire"));
 							
 				printf("Ready to shoot \n");
-								
+				
+				Wait(2.0);
+				
 				//fire after it moves forward (stop when reached waitingToWinch in state machine)
 				while(IsAutonomous() && IsEnabled() && !Shooter.waitingToWinch()){
 					printf("In Shooter Loop \n");
@@ -242,7 +245,7 @@ public:
 			}
 		}
 	}
-	
+
 	void OperatorControl(void)
 	{
 		myRobot.SetSafetyEnabled(false);
@@ -276,7 +279,6 @@ public:
 			Arm.Set(IntakeArm.get_armpist());
 			BallGuard.Set(IntakeArm.get_guardpist());
 			
-			
 			//Catapult Controls
 			Shooter.update(stickRight.GetRawButton(Button_DriverShoot) ||
 					       j3.GetRawButton(Button_ShooterLaunch),
@@ -287,7 +289,6 @@ public:
 			
 			//Compressor
 			Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
-			
 			GetWatchdog().Feed();
 			Wait(0.005);
 			
