@@ -282,7 +282,11 @@ public:
 							 j3.GetRawAxis(Axis_BallGuard));
 			Ejector.Set(IntakeArm.get_ejector());
 			ArmWheels.SetSpeed(IntakeArm.get_roller());
-			Arm.Set(IntakeArm.get_armpist());
+			
+			if(!j3.GetRawButton(Button_Cancel)){
+				Arm.Set(IntakeArm.get_armpist());
+			}
+			
 			BallGuard.Set(IntakeArm.get_guardpist());
 			
 			//Catapult Controls
@@ -294,7 +298,9 @@ public:
 			WinchPist.Set(Shooter.get_winchLock());
 			
 			//Compressor
-			Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
+			if(j3.GetRawButton(Button_Cancel)){
+				Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
+			}
 			GetWatchdog().Feed();
 			Wait(0.005);
 			
