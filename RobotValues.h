@@ -57,3 +57,7 @@ static const double MoveForwardDistance = 0.0;
 static const double WaitBeforeFiring = 0.0;
 static const double kDriveDistance2MoveForwardtoGetBall = -1.2;
 static const double OneBallMoveToFire = -2.6;
+
+
+//Drive
+static const bool cheesyDrive = true;

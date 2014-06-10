@@ -51,7 +51,7 @@ static const uint32_t Button_QuickTurn = 2;
 static const uint32_t Axis_BallGuard = 4;
 
 static const uint32_t Button_ShooterLaunch = 1;
-static const uint32_t Button_Cancel = 2;
+static const uint32_t Button_Cancel = 2;  //Make cancel ALL auto commands
 static const uint32_t Button_RollerIn = 3;
 static const uint32_t Button_RollerOut = 5;
 static const uint32_t Button_Pickup = 4;

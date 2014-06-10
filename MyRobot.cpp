@@ -97,12 +97,12 @@ public:
 		dash->PutNumber("Auton 2: Line Cross", MoveForwardDistance);
 		dash->PutNumber("Auton 1: Line Cross", kDriveDistance1P2);
 		dash->PutNumber("OneBallMoveToFire", OneBallMoveToFire);
+		dash->PutBoolean("Cheesy Drive", cheesyDrive);
 		//dash->PutNumber("Kp1Ball", OneBallKp);
 		//dash->PutNumber("Kd1Ball", OneBallKd);
 		
 		ArmC = true;
 		shootbutton = false;
-
 	}
 	void Autonomous(void)
 	{
@@ -258,12 +258,18 @@ public:
 			Shifter.Set(ShifterC);
 			
 			//Cheezy Drive (Left and Right Drive Control)
-			chezyDrive.update(LeftDriveC, 
-							  RightDriveC, 
-							  stickRight.GetRawButton(Button_QuickTurn), 
-							  !ShifterC);		
-			LeftDrive.Set(chezyDrive.get_l());
-			RightDrive.Set(chezyDrive.get_r());
+			if(dash->GetBoolean("Cheesy Drive")){
+				chezyDrive.update(LeftDriveC, 
+							  	  RightDriveC, 
+							  	  stickRight.GetRawButton(Button_QuickTurn), 
+							  	  !ShifterC);		
+				LeftDrive.Set(chezyDrive.get_l());
+				RightDrive.Set(chezyDrive.get_r());
+			}
+			else if(!dash->GetBoolean("Cheesy Drive")){
+				LeftDrive.Set(-LeftDriveC);
+				RightDrive.Set(RightDriveC);
+			}
 			
 			//Intake Arm Controls
 			IntakeArm.update(j3.GetRawButton(Button_Ejector), 
