@@ -270,6 +270,10 @@ public:
 				LeftDrive.Set(-LeftDriveC);
 				RightDrive.Set(RightDriveC);
 			}
+			else{
+				printf("No Cheesy Drive Value!  \n");
+				printf("I Don't know what drive to do!!!!!  HELP \n");
+			}
 			
 			//Intake Arm Controls
 			IntakeArm.update(j3.GetRawButton(Button_Ejector), 
