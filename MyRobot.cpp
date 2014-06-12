@@ -267,8 +267,8 @@ public:
 				RightDrive.Set(chezyDrive.get_r());
 			}
 			else if(!dash->GetBoolean("Cheesy Drive")){
-				LeftDrive.Set(-LeftDriveC);
-				RightDrive.Set(RightDriveC);
+				LeftDrive.Set(LeftDriveC);
+				RightDrive.Set(stickRight.GetY());
 			}
 			else{
 				printf("No Cheesy Drive Value!  \n");
@@ -302,9 +302,7 @@ public:
 			WinchPist.Set(Shooter.get_winchLock());
 			
 			//Compressor
-			if(j3.GetRawButton(Button_Cancel)){
-				Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
-			}
+			Compr.Set(Presr.Get()? Relay::kOff : Relay::kForward);
 			GetWatchdog().Feed();
 			Wait(0.005);
 			
