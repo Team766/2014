@@ -49,14 +49,14 @@ static const double Kp = 10.0;  //leave alone
 static const double Kd = 0.8;  //  leave alone
 static const double driveTolerance = .01;
 static const double kDriveDistance2MovetoGetBall = 0.0; //0.9144 Two Ball
-static const double kDriveDistance1P2 = -2.0;
-static const double kDriveDistanceMoveAuton = -2.0; 
+static const double kDriveDistance1P2 = 2.0;
+static const double kDriveDistanceMoveAuton = 2.0; 
 static const double ArmAfterFireWait = 2.0;
 static const double ArmWaitforArm = 2.0;
 static const double MoveForwardDistance = 0.0;
 static const double WaitBeforeFiring = 0.0;
-static const double kDriveDistance2MoveForwardtoGetBall = -1.2;
-static const double OneBallMoveToFire = -2.6;
+static const double kDriveDistance2MoveForwardtoGetBall = 1.2;
+static const double OneBallMoveToFire = 2.6;
 
 
 //Drive
