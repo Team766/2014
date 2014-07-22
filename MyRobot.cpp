@@ -324,7 +324,7 @@ public:
 		return (trans / counts) * (atan(1) * 4) * wheel_d;
 	}
 	
-	void autonDriveToDistance(float kDriveDistance){
+	void autonDriveToDistance(float -kDriveDistance){
 		//Reseting Encoders
 		LDriveEnc.Reset();
 		RDriveEnc.Reset();
