@@ -7,6 +7,8 @@ When reading the limit switch read the inverse because Austin made it not read l
 
 Must Hold Button 7 on joystick 3 to enable the auton switch.
 
+1001 Lines of important Code!
+
 Auton Switch and POV Hat configuration:
 
     Slot 1 / Right: Forward Only
